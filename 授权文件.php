@@ -1,0 +1,76 @@
+<?php
+$key=rawurlencode("WvEXisxKsoZ75sVClFxftLVoa7LZJRxJXdvMUHOJydJvbeNGYlgqPGhh0zQmt5ZQbbS8gPCk4ZkDH6ih8m+eWnGzg4plJKGeXCm/HDNrlMLvWncbnz9KMp5jHxcWsO1Usnozt3QdNwbDLi4B8PAB1wzfgaBnn4dfeHA1ACXSIIgSGJcA1WRLC1o2vhLwIHGgWFssbHHnSrpUl6T1Xl+GQf3Vntw2RNV33KOjJePu9tmAEv4QFBVMT/Uy+ISAKCKiFAGofPxZbCTIOT2dZzh9YYZRgV2RSZSwZJEDI2ZUYtpwiipUFSlM4tpxFeEmGJzU7mwKSCVmUNcp2KWAfRq3hQ==");//授权代码
+
+$url= "https://server.fatda.cn/api1.php?key={$key}&name={$_SERVER['HTTP_HOST']}&version=1.0.1";//构造请求地址
+
+//构建$file_content的https请求条件
+$stream_opts = [
+    "ssl" => [
+        "verify_peer"=>false,
+        "verify_peer_name"=>false,
+    ]
+]; 
+@$file_content = file_get_contents($url,false, stream_context_create($stream_opts));//发起请求并返回标准的json
+
+//判断请求是否失败
+if(empty($file_content)){
+    $contents = '授权服务器连接失败,请联系管理员!';
+}else{
+    $arr = json_decode($file_content,true);//对json格式的字符串进行编码，同时进行数组化
+    if($arr['state'] == "500"){
+        $state ="500";
+        $contents = "KEY,域名,版本号获取失败";
+    }
+    if($arr['state'] == "300"){
+        $state ="300";
+        $contents = "KEY,域名不匹配";
+    }
+    if($arr['state'] == "501"){
+        $state ="501";
+        $contents = "您的站点没有授权";
+    }
+    if($arr['state'] == "502"){
+        $state ="502";
+        $contents = "该程序已开启强制更新,请前往下载最新版本".$arr['site_version'];
+    }
+    if($arr['state'] == "200"){
+        if($arr['url_state'] == "0"){
+            $state ="0";
+            $contents = "您的站点已被锁定！";
+        }
+        if($arr['url_state'] == "2"){
+            $state ="2";
+            $contents = "您的站点授权已到期，请获取新的key！";
+        }
+        if($arr['url_state'] == "1"){
+            $state ="200";
+        }
+        
+    }
+    if($state !== "200"){
+    echo "<html>
+            <head>
+                <meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width\">
+                <link rel=\"stylesheet\" href=\"https://cdn.bootcss.com/mdui/0.4.3/css/mdui.min.css\"/>
+            </head>
+            <body class=\"mdui-theme-primary-indigo mdui-theme-accent-pink\"><div class=\"mdui-container\">
+                <div class=\"mdui-row mdui-m-t-2\">	<div class=\"mdui-col-md-6 mdui-col-offset-md-3\">
+                    <div class=\"mdui-card\">
+                        <div class=\"mdui-card-media\">
+                            <img src=\"https://api.ixiaowai.cn/mcapi/mcapi.php\"/>
+                        </div>
+                        
+                        <div class=\"mdui-card-content\"><h2>⚠-Code:{$state}-{$contents}</h2><br>
+                            <h3>{$arr['site_name']}|{$arr['site_version']}-{$arr['site_time']}:</h3>
+                            {$arr['site_introduce']}
+                            </div>
+                    </div>
+                </div>
+            </body>
+            <script src=\"https://cdn.bootcss.com/mdui/0.4.3/js/mdui.min.js\"></script>
+        </html>";
+    exit;
+    }
+}
+
+?>
