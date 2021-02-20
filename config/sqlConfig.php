@@ -1,4 +1,4 @@
-<?php/
+<?php
 //数据库信息
 define('DB_HOST','localhost');//Mysql数据库服务器
 define('DB_USER','2b_com');//Mysql数据库用户名
