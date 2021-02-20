@@ -78,10 +78,10 @@
                                     <a href="./index.php"></a>
                                 </li>
                                 <li>
-                                    <a href="./site.php">站点管理</a>
+                                    <a href="./site.php">授权管理</a>
                                 </li>
                                 <li>
-                                  	<a href="./url.php">授权管理</a>
+                                  	<a href="./url.php">站点管理</a>
                                 </li>
                                 </li>
                                 <li style="display:none">
