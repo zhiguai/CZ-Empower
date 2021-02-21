@@ -18,14 +18,11 @@
    * system.php
    * url.php
    * user.php
-
 * assets
    * ~
-
 * config
    * sqlConfig.php
    * systemCofig.php
-
 * public
    * geetes
    * config
@@ -36,6 +33,5 @@
       * rsa_private_key.pem
       * rsa_public_key.pem
       * rsa.php
-
 * api.php
 * code.php
