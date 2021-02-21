@@ -7,34 +7,35 @@
  * @QQgroup: 801235342
 ---
 ##目录结构
->admin
->>api.php<br>
->>footer.php<br>
->>header.php<br>
->>index.php<br>
->>login.php<br>
->>public.php<br>
->>site.php<br>
->>system.php<br>
->>url.php<br>
->>user.php<br>
+admin
+   api.php<br>
+   footer.php<br>
+   header.php<br>
+   index.php<br>
+   login.php<br>
+   public.php<br>
+   site.php<br>
+   system.php<br>
+   url.php<br>
+   user.php<br>
 
->assets
->>~
->config
->>sqlConfig.php
->>systemCofig.php
+assets
+   ~
 
->public
->>geetes
->>>config
->>>>config.php
->>>lib
->>>>~
->>rsa
->>>>rsa_private_key.pem
->>>>rsa_public_key.pem
->>>>rsa.php
+config
+   sqlConfig.php
+   systemCofig.php
 
->api.php
->code.php
+public
+   geetes
+   config
+      config.php
+   lib
+      ~
+   rsa
+      rsa_private_key.pem
+      rsa_public_key.pem
+      rsa.php
+
+api.php
+code.php
