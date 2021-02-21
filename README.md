@@ -9,6 +9,14 @@
     * Apache2.4.39
     * MySQL5.7.26
     * PHP7.3.4nts
+ * 版本
+    * 1.0.0
+       * 功能
+       * 站点基本设置
+       * 站点管理员设置
+       * 授权应用设置
+       * 授权站点设置
+       * 远程应用授权
 ---
 
 ## 目录结构
@@ -40,3 +48,6 @@
       * rsa.php
 * api.php //授权接口
 * code.php //授权代码
+---
+## 授权原理
+![1](https://github.com/zhiguai/CZ-Empower/blob/master/%E9%AA%8C%E8%AF%81%E6%B5%81%E7%A8%8B.png "图")
