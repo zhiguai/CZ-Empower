@@ -47,6 +47,197 @@
     $sql = Execute($conn, "select * from user where id = '{$_SESSION['id']}'");//查询数据
     $admin_data = mysqli_fetch_assoc($sql);
 
+    //删除站点
+    if ($_GET['state'] == 'deleteurl' && !empty($_GET['id'])) {
+        //判断当前登录者权限
+        if ($admin_data['power'] !== "1") {
+            echo "<script>window.location.href=\"index.php?notifications=3&notifications_content=权限不足\"</script>";
+            exit;
+        }
+
+        $sql = Execute($conn, "select * from url where id = '{$_GET['id']}'");//查询数据
+        if (mysqli_num_rows($sql) !== 1) {
+            echo "<script>window.location.href=\"url.php?&notifications=2&notifications_content=该站点不存在\"</script>";
+            exit;
+        }
+
+        $sql = "delete from url where id='{$_GET['id']}'";
+        if (Execute($conn, $sql)) {
+            echo "<script>window.location.href=\"url.php?notifications=1&notifications_content=删除成功\"</script>";
+            exit;
+        }
+        echo "<script>window.location.href=\"url.php?&notifications=3&notifications_content=系统出错,数据删除失败！\"</script>";
+        exit;
+    }
+
+    //修改站点
+    if ($_POST['state'] == 'editurl' && !empty($_POST['id'])) {
+
+        if (empty($_POST['site_id']) || empty($_POST['url']) || empty($_POST['email']) || empty($_POST['url_state']) || empty($_POST['expire_time'])) {
+            echo "<script>window.location.href=\"url.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=请勿留空！\"</script>";
+            exit;
+        }
+        if (mb_strlen($_POST['site_id'], 'UTF8') > 10) {
+            echo "<script>window.location.href=\"url.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=授权应用ID不能超出10个字符\"</script>";
+            exit;
+        }
+        if (mb_strlen($_POST['site_id'], 'UTF8') < 1) {
+            echo "<script>window.location.href=\"url.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=授权应用ID不得低于1个字符\"</script>";
+            exit;
+        }
+        
+        if (mb_strlen($_POST['url'], 'UTF8') > 50) {
+            echo "<script>window.location.href=\"url.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=域名不能超出50个字符\"</script>";
+            exit;
+        }
+        if (mb_strlen($_POST['url'], 'UTF8') < 3) {
+            echo "<script>window.location.href=\"url.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=域名不能低于3个字符\"</script>";
+            exit;
+        }
+        $preg_email='/^[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*@([a-zA-Z0-9]+[-.])+([a-z]{2,5})$/ims';
+        if(!preg_match($preg_email,$_POST['email'])){
+            echo "<script>window.location.href=\"url.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=邮箱格式错误\"</script>";
+            exit;
+        }
+        if (mb_strlen($_POST['email'], 'UTF8') > 50) {
+            echo "<script>window.location.href=\"url.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=邮箱不能超出50个字符\"</script>";
+            exit;
+        }
+        if (mb_strlen($_POST['email'], 'UTF8') < 3) {
+            echo "<script>window.location.href=\"url.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=邮箱不能低于3个字符\"</script>";
+            exit;
+        }
+        if ($_POST['url_state'] !== "true" && $_POST['url_state'] !== "false") {
+            echo "<script>window.location.href=\"url.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=url_state参数无效\"</script>";
+            exit;
+        }
+
+        $preg_time="/^\d{4}[\-](0?[1-9]|1[012])[\-](0?[1-9]|[12][0-9]|3[01])(\s+(0?[0-9]|1[0-9]|2[0-3])\:(0?[0-9]|[1-5][0-9])\:(0?[0-9]|[1-5][0-9]))?$/";;
+        if(!preg_match($preg_time,$_POST['expire_time'])){
+            exit;
+            echo "<script>window.location.href=\"url.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=expire_time参数无效\"</script>";
+            exit;
+        }
+
+        $time = date('Y-m-d h:i:s', time());
+        $sql = "update url set site_id = '{$_POST['site_id']}' ,email = '{$_POST['email']}' ,state = '{$_POST['url_state']}' , url = '{$_POST['url']}' , expire_time = '{$_POST['expire_time']}', time = '$time' where id = '{$_POST['id']}'";
+        
+        if (Execute($conn, $sql)) {
+            echo "<script>window.location.href=\"url.php?notifications=1&notifications_content=修改成功\"</script>";
+            exit;
+        }
+        echo "<script>window.location.href=\"url.php?notifications=3&notifications_content=系统出错,数据写入失败！\"</script>";
+        exit;
+    }
+    //添加站点
+    if ($_GET['state'] == 'addurl') {
+
+        $state = "true";
+        $time = date('Y-m-d h:i:s', time());
+        $sql = "INSERT INTO url (site_id,url,email,state,expire_time,time)
+        VALUES ('0','fatda.cn','xxx@qq.com','$state','$time','$time')";
+        
+        if (Execute($conn, $sql)) {
+            echo "<script>window.location.href=\"url.php?notifications=1&notifications_content=添加成功\"</script>";
+            exit;
+        }
+        echo "<script>window.location.href=\"url.php?notifications=3&notifications_content=系统出错,数据写入失败！\"</script>";
+        exit;
+    }
+
+    //删除授权
+    if ($_GET['state'] == 'deletesite' && !empty($_GET['id'])) {
+        //判断当前登录者权限
+        if ($admin_data['power'] !== "1") {
+            echo "<script>window.location.href=\"index.php?notifications=3&notifications_content=权限不足\"</script>";
+            exit;
+        }
+
+        $sql = Execute($conn, "select * from site where id = '{$_GET['id']}'");//查询数据
+        if (mysqli_num_rows($sql) !== 1) {
+            echo "<script>window.location.href=\"site.php?&notifications=2&notifications_content=该用户不存在\"</script>";
+            exit;
+        }
+
+        $sql = "delete from site where id='{$_GET['id']}'";
+        if (Execute($conn, $sql)) {
+            echo "<script>window.location.href=\"site.php?notifications=1&notifications_content=删除成功\"</script>";
+            exit;
+        }
+        echo "<script>window.location.href=\"site.php?&notifications=3&notifications_content=系统出错,数据删除失败！\"</script>";
+        exit;
+    }
+    
+    //添加授权
+    if ($_GET['state'] == 'addsite') {
+
+        $name = "新建".substr(md5(time()), 0, 15);
+        $version = "1.0.0";
+        $state = "true";
+        $time = date('Y-m-d h:i:s', time());
+        $sql = "INSERT INTO site (name,introduce,version,state,switch,time)
+        VALUES ('$name','$name','$version','$state','$state','$time')";
+        
+        if (Execute($conn, $sql)) {
+            echo "<script>window.location.href=\"site.php?notifications=1&notifications_content=添加成功\"</script>";
+            exit;
+        }
+        echo "<script>window.location.href=\"site.php?notifications=3&notifications_content=系统出错,数据写入失败！\"</script>";
+        exit;
+    }
+
+    //修改授权
+    if ($_POST['state'] == 'editsite' && !empty($_POST['id'])) {
+
+        if (empty($_POST['name']) || empty($_POST['introduce']) || empty($_POST['site_state']) || empty($_POST['version']) || empty($_POST['switch'])) {
+            echo "<script>window.location.href=\"site.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=请勿留空！\"</script>";
+            exit;
+        }
+        if (mb_strlen($_POST['name'], 'UTF8') > 24) {
+            echo "<script>window.location.href=\"site.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=应用名不能超出24个字符\"</script>";
+            exit;
+        }
+        if (mb_strlen($_POST['name'], 'UTF8') < 6) {
+            echo "<script>window.location.href=\"site.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=应用名不得低于6个字符\"</script>";
+            exit;
+        }
+        
+        if (mb_strlen($_POST['introduce'], 'UTF8') > 255) {
+            echo "<script>window.location.href=\"site.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=介绍不能超出225个字符\"</script>";
+            exit;
+        }
+        if (mb_strlen($_POST['introduce'], 'UTF8') < 3) {
+            echo "<script>window.location.href=\"site.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=介绍不能低于3个字符\"</script>";
+            exit;
+        }
+        if (mb_strlen($_POST['version'], 'UTF8') > 7) {
+            echo "<script>window.location.href=\"site.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=版本号不能超出7个字符\"</script>";
+            exit;
+        }
+        if (mb_strlen($_POST['version'], 'UTF8') < 1) {
+            echo "<script>window.location.href=\"site.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=版本号不能低于1个字符\"</script>";
+            exit;
+        }
+        if ($_POST['site_state'] !== "true" && $_POST['site_state'] !== "false") {
+            echo "<script>window.location.href=\"site.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=site_state参数无效\"</script>";
+            exit;
+        }
+        if ($_POST['switch'] !== "true" && $_POST['switch'] !== "false") {
+            echo "<script>window.location.href=\"site.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=site_switch参数无效\"</script>";
+            exit;
+        }
+
+        $time = date('Y-m-d h:i:s', time());  
+        $sql = "update site set name = '{$_POST['name']}' ,introduce = '{$_POST['introduce']}' , version = '{$_POST['version']}' , state = '{$_POST['site_state']}' , switch = '{$_POST['switch']}', time = '$time' where id = '{$_POST['id']}'";
+        
+        if (Execute($conn, $sql)) {
+            echo "<script>window.location.href=\"site.php?notifications=1&notifications_content=修改成功\"</script>";
+            exit;
+        }
+        echo "<script>window.location.href=\"site.php?notifications=3&notifications_content=系统出错,数据写入失败！\"</script>";
+        exit;
+    }
+
     //系统修改
     if ($_POST['state'] == 'system') {
         //判断当前登录者权限
@@ -59,6 +250,13 @@
             echo '<script>window.location.href="system.php?notifications=2&notifications_content=请修改后再提交"</script>';
             exit;
         }
+
+        $_POST['tittle'] = addslashes($_POST['tittle']);
+        $_POST['keyworld'] = addslashes($_POST['keyworld']);
+        $_POST['description'] = addslashes($_POST['description']);
+        $_POST['notice'] = addslashes($_POST['notice']);
+        $_POST['copyright'] = addslashes($_POST['copyright']);
+        $_POST['friend'] = addslashes($_POST['friend']);
 
         $filename='../config/systemConfig.php';
         $str_file=file_get_contents($filename);
@@ -172,7 +370,7 @@
             echo "<script>window.location.href=\"user.php?notifications=1&notifications_content=删除成功\"</script>";
             exit;
         }
-        echo "<script>window.location.href=\"user.php?state=adduser&notifications=3&notifications_content=系统出错,数据删除失败！\"</script>";
+        echo "<script>window.location.href=\"user.php?notifications=3&notifications_content=系统出错,数据删除失败！\"</script>";
         exit;
     }
 

@@ -48,7 +48,7 @@
                     <!-- LOGO图标 -->
 					<a class="logo text-center mb-4 active">
                         <span class="logo-lg">
-								<h1 class="mdi mdi-heart-pulse" style="font-size:80px"></h1>
+								<h1 class="mdi mdi-server" style="font-size:80px"></h1>
                         </span>
                         <span class="logo-sm">
                             <img src="../assets/htmlimg/logo_sm.png" alt="" height="16">
@@ -166,7 +166,7 @@ if($admin_data['power'] == "1"){
                         </ul>
                       
                         <div class="app-search">
-                            <form action="card.php" method="get">
+                            <form action="site.php" method="get">
                                 <div class="input-group">
                                     <input type="text" class="form-control" name="searchcont" placeholder="Search...">
                                     <span class="mdi mdi-magnify"></span>

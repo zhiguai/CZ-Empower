@@ -47,11 +47,11 @@
                     <div class="col-lg-6">
                         <div class="form-group mb-3">
                             <label for="example-textarea">版权</label>
-                            <textarea class="form-control" name="copyright" rows="5" placeholder="CZCW表白墙 by <a href='chizg.cn'>吃纸怪</a>"><?php echo SYSTEM_COPYRIGHT;?></textarea>
+                            <textarea class="form-control" name="copyright" rows="5" placeholder="CZCW表白墙 by <a href='chizg.cn'>吃纸怪</a>"><?php echo stripslashes(SYSTEM_COPYRIGHT);?></textarea>
                         </div>
                         <div class="form-group mb-3">
                             <label for="example-textarea">友情链接</label>
-                            <textarea class="form-control" name="friend" rows="5" placeholder="<a href='chizg.cn'>吃纸怪</a>"><?php echo SYSTEM_FRIENDS;?></textarea>
+                            <textarea class="form-control" name="friend" rows="5" placeholder="<a href='chizg.cn'>吃纸怪</a>"><?php echo stripslashes(SYSTEM_FRIENDS);?></textarea>
                         </div>
                     </div> <!-- end col -->
                 </div>

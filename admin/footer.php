@@ -6,12 +6,12 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-6">
-                                <?php echo SYSTEM_COPYRIGHT;?>
+                                <?php echo stripslashes(SYSTEM_COPYRIGHT);?>
                             </div>
                           
                             <div class="col-md-6">
                                 <div class="text-md-right footer-links d-none d-sm-block">
-									<?php echo SYSTEM_FRIENDS;?>
+									<?php echo stripslashes(SYSTEM_FRIENDS);?>
                                 </div>
                             </div>
                         </div>
