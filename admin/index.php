@@ -27,22 +27,22 @@
 			<div class="card-body">
 				<h4 class="header-title mt-0 mb-3">系统详情卡</h4>
 				<p class="text-muted font-13">
-					该系统由Greaty独立完成，本系统大部分源码开源使用，修改请保留版权谢谢！
+				Made by 吃纸怪 ©2021 FatDa. All rights reserved.
 				</p>
 
 				<hr>
 
 				<div class="text-left">
-					<p class="text-muted"><strong>作者 :</strong> <span class="ml-2">Greaty</span></p>
+					<p class="text-muted"><strong>作者 :</strong> <span class="ml-2">吃纸怪</span></p>
 
 					<p class="text-muted"><strong>QQ :</strong><span class="ml-2">236435377</span></p>
 
 					<p class="text-muted"><strong>Email :</strong> <span class="ml-2">2635435377@qq.com</span></p>
 
-					<p class="text-muted"><strong>作者主页 :</strong> <span class="ml-2"><a target="_blank" href="http://www.pullba.xyz">www.pullba.xyz</a></span></p>
+					<p class="text-muted"><strong>作者主页 :</strong> <span class="ml-2"><a target="_blank" href="https://chizg.cn">chizg.cn</a></span></p>
 
 					<p class="text-muted"><strong>系统版本 :</strong>
-						<span class="ml-2"> V2.0 </span>
+						<span class="ml-2"> V1.0.0 </span>
 					</p>
 
 				</div>
@@ -59,7 +59,7 @@
 				<div class="card tilebox-one">
 					<div class="card-body">
 						<i class="mdi mdi-heart-box float-right text-muted"></i>
-						<h6 class="text-muted text-uppercase mt-0">站点总数</h6>
+						<h6 class="text-muted text-uppercase mt-0">授权总数</h6>
 						<h2 class="m-b-20"><?php echo $cntcont;?>个</h2>
 					</div> <!-- end card-body-->
 				</div> <!--end card-->
@@ -69,7 +69,7 @@
 				<div class="card tilebox-one">
 					<div class="card-body">
 						<i class="mdi mdi-tooltip-text float-right text-muted"></i>
-						<h6 class="text-muted text-uppercase mt-0">授权总数</h6>
+						<h6 class="text-muted text-uppercase mt-0">站点总数</h6>
 						<h2 class="m-b-20"><?php echo $cntspk;?>个</h2>
 					</div> <!-- end card-body-->
 				</div> <!--end card-->
