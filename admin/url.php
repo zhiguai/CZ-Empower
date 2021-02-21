@@ -60,7 +60,7 @@
 <br><br><br>
     <div class="card">
     <div class="card-body">
-        <h4 class="header-title mb-3">授权管理：<a href="api.php?state=addurl"><button type="button" class="foot-right btn btn-info btn-rounded">添加授权</button></a></h4>
+        <h4 class="header-title mb-3">站点管理：<a href="api.php?state=addurl"><button type="button" class="foot-right btn btn-info btn-rounded">添加授权</button></a></h4>
 
         <div class="table-responsive">
             <table class="table table-bordered table-centered mb-0">

@@ -106,10 +106,10 @@ if($admin_data['power'] == "1"){
                                     <a href="./index.php"></a>
                                 </li>
                                 <li style="display:none">
-                                    <a href="./card.php">卡片管理</a>
+                                    <a href="./site.php">授权管理</a>
                                 </li>
                                 <li style="display:none">
-                                  	<a href="./comment.php">评论管理</a>
+                                  	<a href="./url.php">站点管理</a>
                                 </li>
                                 </li>
                                 <li>

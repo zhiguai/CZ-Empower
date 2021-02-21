@@ -44,7 +44,7 @@
     //账号退出
     if($_POST['state'] == 'logout'){
 		unset ($_SESSION['id']);
-        echo '<script>window.location.href="../index/index.php?notifications=1&notifications_content=退出成功"</script>';
+        echo '<script>window.location.href="../"</script>';
         exit;
 	}
 	
