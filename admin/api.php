@@ -193,6 +193,7 @@
             echo "<script>window.location.href=\"site.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=请勿留空！\"</script>";
             exit;
         }
+        
         if (mb_strlen($_POST['name'], 'UTF8') > 24) {
             echo "<script>window.location.href=\"site.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=应用名不能超出24个字符\"</script>";
             exit;
