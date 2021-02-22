@@ -31,6 +31,11 @@
    * system.php //页面构成身体 系统配置管理页面
    * url.php //页面构成身体 授权站点管理页面
    * user.php //页面构成身体 用户管理页面
+* index
+   * footer.php //页面构成底部
+   * header.php //页面构成头部
+   * index.php //页面构成身体 前台首页
+   * finde.php //页面构成身体 查询页
 * assets
    * ~ //略
 * config
@@ -48,6 +53,9 @@
       * rsa.php
 * api.php //授权接口
 * code.php //授权代码
+
+后台邮箱 域名 站点 相同的授权 不能同时有两个
+
 ---
 ## 授权原理
 ![1](https://github.com/zhiguai/CZ-Empower/blob/master/%E9%AA%8C%E8%AF%81%E6%B5%81%E7%A8%8B.png "图")
