@@ -15,7 +15,7 @@
         
         <!-- build:css -->
 		<meta name=”referrer” content=”no-referrer” />
-        <link href="../assets/css/app.min.css" rel="stylesheet" type="text/css" />
+        <link href="../assets/admin/css/app.min.css" rel="stylesheet" type="text/css" />
         <!-- endbuild -->
       
         <!-- css -->
@@ -51,7 +51,7 @@
 								<h1 class="mdi mdi-server" style="font-size:80px"></h1>
                         </span>
                         <span class="logo-sm">
-                            <img src="../assets/htmlimg/logo_sm.png" alt="" height="16">
+                            <img src="../assets/admin/htmlimg/logo_sm.png" alt="" height="16">
                         </span>
                     </a>
 

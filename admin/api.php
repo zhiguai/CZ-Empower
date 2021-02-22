@@ -77,6 +77,14 @@
             echo "<script>window.location.href=\"url.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=请勿留空！\"</script>";
             exit;
         }
+
+        //防止重复
+        $sql = Execute($conn, "select * from url where site_id = '{$_POST['site_id']}' and url = '{$_POST['url']}' and email = '{$_POST['email']}'");//查询数据
+        if (mysqli_num_rows($sql) > 1) {
+            echo "<script>window.location.href=\"?notifications=2&notifications_content=该授权信息已存在，请修改后再试\"</script>";
+            exit;
+        }
+
         if (mb_strlen($_POST['site_id'], 'UTF8') > 10) {
             echo "<script>window.location.href=\"url.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=授权应用ID不能超出10个字符\"</script>";
             exit;
@@ -188,12 +196,12 @@
 
     //修改授权
     if ($_POST['state'] == 'editsite' && !empty($_POST['id'])) {
-
+        
         if (empty($_POST['name']) || empty($_POST['introduce']) || empty($_POST['site_state']) || empty($_POST['version']) || empty($_POST['switch'])) {
             echo "<script>window.location.href=\"site.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=请勿留空！\"</script>";
             exit;
         }
-        
+
         if (mb_strlen($_POST['name'], 'UTF8') > 24) {
             echo "<script>window.location.href=\"site.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=应用名不能超出24个字符\"</script>";
             exit;

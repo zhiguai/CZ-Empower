@@ -11,7 +11,7 @@
     }
 </style>
 <!-- 为使用方便，直接使用jquery.js库，如您代码中不需要，可以去掉 -->
-<script src="../assets/js/jquery.min.js"></script>
+<script src="../assets/admin/js/jquery.min.js"></script>
 <!-- 引入封装了failback的接口--initGeetest -->
 <script src="../public/geetest/gt.js"></script>
 <script>

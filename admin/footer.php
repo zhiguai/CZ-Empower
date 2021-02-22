@@ -26,7 +26,7 @@
 
         </div>
         <!-- END wrapper -->
-        <script type="text/javascript" src="../assets/js/jquery.min.js" ></script>
-        <script type="text/javascript" src="../assets/javascript/app.min.js"></script>
+        <script type="text/javascript" src="../assets/admin/js/jquery.min.js" ></script>
+        <script type="text/javascript" src="../assets/admin/javascript/app.min.js"></script>
     </body>
 </html>
