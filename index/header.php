@@ -1,13 +1,14 @@
 <?php include './public.php';?>
-
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <title><?php echo SYSTEM_TITTLE;?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="keywords" content="<?php echo SYSTEM_KEYWORDS;?>">
     <meta name="description" content="<?php echo SYSTEM_DESCRIPTION;?>">
-    <title>Home</title>
+    <meta name="author" content="Webpixels">
+    <title><?php echo SYSTEM_TITTLE;?></title>
     <!-- Preloader -->
     <style>
         @keyframes hidePreloader {
@@ -57,13 +58,14 @@
         });
     </script>
     <!-- Favicon -->
-    <link rel="icon" href="../favicon.png" type="image/png"><!-- Font Awesome -->
+    <link rel="icon" href="../assets/index/img/brand/favicon.png" type="image/png"><!-- Font Awesome -->
     <link rel="stylesheet" href="../assets/index/libs/@fortawesome/fontawesome-free/css/all.min.css">
     <!-- Quick CSS -->
     <link rel="stylesheet" href="../assets/index/css/quick-website.css" id="stylesheet">
 </head>
 
 <body>
+
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
         <div class="container">
             <!-- Brand -->
@@ -96,7 +98,7 @@
             </div>
         </div>
     </nav>
-    
+    </nav>
     <!-- Main content -->
                 <?php 
                     /*

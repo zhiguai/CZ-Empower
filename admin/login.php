@@ -88,7 +88,7 @@
         
         <!-- build:css -->
 		<meta name=”referrer” content=”no-referrer” />
-        <link href="../assets/css/app.min.css" rel="stylesheet" type="text/css" />
+        <link href="../assets/admin/css/app.min.css" rel="stylesheet" type="text/css" />
         <!-- endbuild -->
     </head>
 

@@ -81,7 +81,7 @@
         //防止重复
         $sql = Execute($conn, "select * from url where site_id = '{$_POST['site_id']}' and url = '{$_POST['url']}' and email = '{$_POST['email']}'");//查询数据
         if (mysqli_num_rows($sql) > 1) {
-            echo "<script>window.location.href=\"?notifications=2&notifications_content=该授权信息已存在，请修改后再试\"</script>";
+            echo "<script>window.location.href=\"url.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=该授权信息已存在，请修改后再试\"</script>";
             exit;
         }
 
