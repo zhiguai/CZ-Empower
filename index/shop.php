@@ -24,7 +24,7 @@
                 </p>
                 <!-- Buttons -->
                 <div class="mt-5 text-center text-lg-left">
-                    <a href="#sct-form-contact" data-scroll-to="" class="btn btn-white btn-lg btn-icon">
+                    <a href="index.php?submit=logout" data-scroll-to="" class="btn btn-white btn-lg btn-icon">
                         <span class="btn-inner--icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
                         </span>
@@ -108,8 +108,14 @@
                                             <input name="url" type="text" class="form-control form-control-emphasized" placeholder="www.fatda.cn">
                                         </div>
                                     </div>
+                                        <!-- 极验 --> 
+                                    <div id="embed-captcha"></div>
+                                    <div id="notice" class="hide" role="alert">请先完成验证</div>
+                                    <p id="wait" class="show">正在加载验证码......</p>
                                     <div class="mt-4">
-                                        <button type="submit" name="state" value="addurl"class="btn btn-block btn-primary">提 交</button></div>
+                                        <button  id="embed-submit"  type="submit" name="state" value="addurl"class="btn btn-block btn-primary">提 交</button>
+                                    </div>
+                                
                                 </form>
                                 
                                 <!-- Alternative login -->

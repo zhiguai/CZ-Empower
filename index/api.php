@@ -47,6 +47,27 @@
 
    //自助添加站点
    if ($_POST['state'] == 'addurl') {
+
+        //极验二次验证
+        require_once dirname(dirname(__FILE__)) . '/public/geetest/lib/class.geetestlib.php';
+        require_once dirname(dirname(__FILE__)) . '/public/geetest/config/config.php';
+        
+        $GtSdk = new GeetestLib(CAPTCHA_ID, PRIVATE_KEY);
+        if ($_SESSION['gtserver'] == 1) {   //服务器正常
+            $result = $GtSdk->success_validate($_POST['geetest_challenge'], $_POST['geetest_validate'], $_POST['geetest_seccode']);
+            if ($result) {
+            } else {
+                echo '<script>window.location.href="?notifications=2&notifications_content=人机验证失败，请重新验证！"</script>';
+                exit;
+            }
+        } else {  //服务器宕机,走failback模式
+            if ($GtSdk->fail_validate($_POST['geetest_challenge'], $_POST['geetest_validate'], $_POST['geetest_seccode'])) {
+            } else {
+                echo '<script>window.location.href="?notifications=2&notifications_content=人机验证失败，请重新验证！"</script>';
+                exit;
+            }
+        }
+
         $_POST['site_id'] = addslashes($_POST['site_id']);
         $_POST['url'] = addslashes($_POST['url']);
         if (empty($_POST['site_id']) || empty($_POST['url'])) {

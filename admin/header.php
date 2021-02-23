@@ -88,6 +88,9 @@
                                     <a href="./system.php">基本设置</a>
                                 </li>
                                 <li style="display:none">
+                                    <a href="./email.php">RSA设置</a>
+                                </li>
+                                <li style="display:none">
                                     <a href="./rsa.php">RSA设置</a>
                                 </li>
                                 <li style="display:none">
@@ -117,6 +120,9 @@ if($admin_data['power'] == "1"){
                                 </li>
                                 <li>
                                     <a href="./system.php">基本设置</a>
+                                </li>
+                                <li>
+                                    <a href="./email.php">RSA设置</a>
                                 </li>
                                 <li>
                                     <a href="./rsa.php">RSA密钥设置</a>
