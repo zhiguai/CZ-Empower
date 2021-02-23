@@ -35,5 +35,11 @@
         return $ip;
     }
 
+    if ($_GET['submit'] == "logout") {
+        unset($_SESSION['username']);
+        echo "<script>window.location.href=\"index.php?submit=login&notifications=1&notifications_content=身份注销成功\"</script>";
+        exit;
+    }
+
     //常用变量
     $ip = GetClientIp();

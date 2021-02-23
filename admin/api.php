@@ -49,11 +49,6 @@
 
     //删除站点
     if ($_GET['state'] == 'deleteurl' && !empty($_GET['id'])) {
-        //判断当前登录者权限
-        if ($admin_data['power'] !== "1") {
-            echo "<script>window.location.href=\"index.php?notifications=3&notifications_content=权限不足\"</script>";
-            exit;
-        }
 
         $sql = Execute($conn, "select * from url where id = '{$_GET['id']}'");//查询数据
         if (mysqli_num_rows($sql) !== 1) {
@@ -155,11 +150,6 @@
 
     //删除授权
     if ($_GET['state'] == 'deletesite' && !empty($_GET['id'])) {
-        //判断当前登录者权限
-        if ($admin_data['power'] !== "1") {
-            echo "<script>window.location.href=\"index.php?notifications=3&notifications_content=权限不足\"</script>";
-            exit;
-        }
 
         $sql = Execute($conn, "select * from site where id = '{$_GET['id']}'");//查询数据
         if (mysqli_num_rows($sql) !== 1) {
@@ -183,8 +173,8 @@
         $version = "1.0.0";
         $state = "true";
         $time = date('Y-m-d h:i:s', time());
-        $sql = "INSERT INTO site (name,introduce,version,state,switch,time)
-        VALUES ('$name','$name','$version','$state','$state','$time')";
+        $sql = "INSERT INTO site (name,introduce,version,state,shop,switch,time)
+        VALUES ('$name','$name','$version','$state','false','$state','$time')";
         
         if (Execute($conn, $sql)) {
             echo "<script>window.location.href=\"site.php?notifications=1&notifications_content=添加成功\"</script>";
@@ -197,7 +187,7 @@
     //修改授权
     if ($_POST['state'] == 'editsite' && !empty($_POST['id'])) {
         
-        if (empty($_POST['name']) || empty($_POST['introduce']) || empty($_POST['site_state']) || empty($_POST['version']) || empty($_POST['switch'])) {
+        if (empty($_POST['name']) || empty($_POST['introduce']) || empty($_POST['site_state']) || empty($_POST['version']) || empty($_POST['switch']) || empty($_POST['shop'])) {
             echo "<script>window.location.href=\"site.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=请勿留空！\"</script>";
             exit;
         }
@@ -235,9 +225,13 @@
             echo "<script>window.location.href=\"site.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=site_switch参数无效\"</script>";
             exit;
         }
+        if ($_POST['shop'] !== "true" && $_POST['shop'] !== "false") {
+            echo "<script>window.location.href=\"site.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=site_switch参数无效\"</script>";
+            exit;
+        }
 
         $time = date('Y-m-d h:i:s', time());  
-        $sql = "update site set name = '{$_POST['name']}' ,introduce = '{$_POST['introduce']}' , version = '{$_POST['version']}' , state = '{$_POST['site_state']}' , switch = '{$_POST['switch']}', time = '$time' where id = '{$_POST['id']}'";
+        $sql = "update site set name = '{$_POST['name']}' ,shop = '{$_POST['shop']}' ,introduce = '{$_POST['introduce']}' , version = '{$_POST['version']}' , state = '{$_POST['site_state']}' , switch = '{$_POST['switch']}', time = '$time' where id = '{$_POST['id']}'";
         
         if (Execute($conn, $sql)) {
             echo "<script>window.location.href=\"site.php?notifications=1&notifications_content=修改成功\"</script>";
@@ -307,6 +301,91 @@
         exit;
     }
 
+    //邮件修改
+    if ($_POST['state'] == 'email') {
+        //判断当前登录者权限
+        if ($admin_data['power'] !== "1") {
+            echo "<script>window.location.href=\"index.php?notifications=3&notifications_content=权限不足\"</script>";
+            exit;
+        }
+        //读取email配置
+        require_once "../public/email/config.php";
+        if ($_POST['smtp_server'] == smtp_server && $_POST['smtp_serverport'] == smtp_serverport && $_POST['smtp_usermail'] == smtp_usermail && $_POST['smtp_usermail1'] == smtp_usermail1 && $_POST['copyright'] == smtp_pass && $_POST['friend'] == smtp_username) {
+            echo '<script>window.location.href="system.php?notifications=2&notifications_content=请修改后再提交"</script>';
+            exit;
+        }
+
+        $_POST['smtp_server'] = addslashes($_POST['smtp_server']);
+        $_POST['smtp_serverport'] = addslashes($_POST['smtp_serverport']);
+        $_POST['smtp_usermail'] = addslashes($_POST['smtp_usermail']);
+        $_POST['smtp_usermail1'] = addslashes($_POST['smtp_usermail1']);
+        $_POST['smtp_pass'] = addslashes($_POST['smtp_pass']);
+        $_POST['smtp_username'] = addslashes($_POST['smtp_username']);
+
+        $filename='../config/systemConfig.php';
+        $str_file=file_get_contents($filename);
+        $pattern="/'smtp_server',.*?\)/";
+        if (preg_match($pattern, $str_file)) {
+            $_POST['smtp_server']=addslashes($_POST['smtp_server']);
+            $str_file=preg_replace($pattern, "'smtp_server','{$_POST['tittle']}')", $str_file);
+        }
+        $pattern="/'smtp_serverport',.*?\)/";
+        if (preg_match($pattern, $str_file)) {
+            $_POST['keywords']=addslashes($_POST['keywords']);
+            $str_file=preg_replace($pattern, "'smtp_serverport','{$_POST['keywords']}')", $str_file);
+        }
+        $pattern="/'smtp_usermail',.*?\)/";
+        if (preg_match($pattern, $str_file)) {
+            $_POST['description']=addslashes($_POST['description']);
+            $str_file=preg_replace($pattern, "'smtp_usermail','{$_POST['description']}')", $str_file);
+        }
+        $pattern="/'smtp_usermail',.*?\)/";
+        if (preg_match($pattern, $str_file)) {
+            $_POST['notice']=addslashes($_POST['notice']);
+            $str_file=preg_replace($pattern, "'smtp_usermail','{$_POST['notice']}')", $str_file);
+        }
+        $pattern="/'smtp_pass',.*?\)/";
+        if (preg_match($pattern, $str_file)) {
+            $_POST['copyright']=$_POST['copyright'];
+            $str_file=preg_replace($pattern, "'smtp_pass','{$_POST['copyright']}')", $str_file);
+        }
+        $pattern="/'smtp_username',.*?\)/";
+        if (preg_match($pattern, $str_file)) {
+            $_POST['friend']=$_POST['friend'];
+            $str_file=preg_replace($pattern, "'smtp_username','{$_POST['friend']}')", $str_file);
+        }
+        if (!file_put_contents($filename, $str_file)) {
+            echo '<script>window.location.href="email.php?notifications=2&notifications_content=修改失败，请检查权限！"</script>';
+            exit;
+        }
+        echo '<script>window.location.href="email.php?notifications=1&notifications_content=修改成功"</script>';
+        exit;
+    }
+
+    //RSA密钥修改
+    if ($_POST['state'] == 'rsa') {
+        //判断当前登录者权限
+        if ($admin_data['power'] !== "1") {
+            echo "<script>window.location.href=\"index.php?notifications=3&notifications_content=权限不足\"</script>";
+            exit;
+        }
+
+        if (empty($_POST['public']) || empty($_POST['private'])) {
+            echo '<script>window.location.href="rsa.php?notifications=2&notifications_content=请勿留空"</script>';
+            exit;
+        }
+        $file_path1 = "../public/rsa/rsa_public_key.pem";
+        $file_path2 = "../public/rsa/rsa_private_key.pem";
+        $filename1 = $_POST['public'];
+        $filename2 = $_POST['private'];
+        if (!file_put_contents($file_path1,$filename1) || !file_put_contents($file_path2,$filename2) ) {
+            exit;
+            echo '<script>window.location.href="rsa.php?notifications=2&notifications_content=修改失败，请检查权限！"</script>';
+            exit;
+        }
+        echo '<script>window.location.href="rsa.php?notifications=1&notifications_content=修改成功"</script>';
+        exit;
+    }
     //账号添加
     if ($_POST['state'] == 'adduser') {
         //判断当前登录者权限

@@ -32,7 +32,7 @@
                     </p>
                     <!-- Buttons -->
                     <div class="text-center text-md-left mt-5">
-                        <a href="#" class="btn btn-primary btn-icon">
+                        <a href="shop.php" class="btn btn-primary btn-icon">
                             <span class="btn-inner--text">获取授权</span><span class="btn-inner--icon">
                                 <i data-feather="arrow-right"></i>
                             </span>

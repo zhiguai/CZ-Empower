@@ -1,5 +1,10 @@
 <?php
     include './header.php';
+    //判断当前登录者权限
+    if ($admin_data['power'] !== "1") {
+        echo "<script>window.location.href=\"index.php?notifications=3&notifications_content=权限不足\"</script>";
+        exit;
+    }
 ?>
 
 <!-- 内容标题 -->

@@ -84,7 +84,7 @@
                     </li>
                 </ul>
                 <!-- Button -->
-                <a class="navbar-btn btn btn-sm btn-primary d-none d-lg-inline-block ml-3" href="">
+                <a class="navbar-btn btn btn-sm btn-primary d-none d-lg-inline-block ml-3" href="shop.php">
                     获取授权
                 </a>
                 <a class="navbar-btn btn btn-sm btn-warning d-none d-lg-inline-block" href="find.php" target="_blank">
@@ -92,7 +92,7 @@
                 </a>
                 <!-- Mobile button -->
                 <div class="d-lg-none text-center">
-                    <a href="" class="btn btn-sm btn-primary">查询授权</a>
+                    <a href="shop.php" class="btn btn-sm btn-primary">查询授权</a>
                     <a href="find.php" class="btn btn-sm btn-warning">查询授权</a>
                 </div>
             </div>

@@ -69,6 +69,7 @@
                         <th>应用介绍</th>
                         <th>当前版本</th>
                         <th>授权状态</th>
+                        <th>自助授权</th>
                         <th>强制更新状态</th>
                         <th>最后修改时间</th>
                         <th>操作</th>
@@ -93,6 +94,7 @@ while ($page_row = mysqli_fetch_array($page_result)) {
                         <td><?php echo $page_row['introduce']; ?></td>
                         <td><?php echo $page_row['version']; ?></td>
                         <td><span class="badge badge-<?php echo $site_staet; ?>"><?php echo $page_row['switch']; ?></span></td>
+                        <td><?php echo $page_row['shop']; ?></td>
                         <td><?php echo $page_row['state']; ?></td>
                         <td><?php echo $page_row['time']; ?></td>
                         <td class="table-action">
@@ -117,6 +119,25 @@ while ($page_row = mysqli_fetch_array($page_result)) {
             exit;
         }
         $site_data = mysqli_fetch_assoc($sql); 
+
+        $state_state1 = "开";
+        $state_state = "true";
+        $switch_state1 = "开";
+        $switch_state = "true";
+        $shop_state1 = "开";
+        $shop_state = "true";
+        if($site_data['state']  == "false"){
+            $state_state1 = "关";
+            $state_state = "false";
+        }
+        if($site_data['switch']  == "false"){
+            $switch_state1 = "关";
+            $switch_state = "false";
+        }
+        if($site_data['shop']  == "false"){
+            $shop_state1 = "关";
+            $shop_state = "false";
+        }
 ?>
 
 <div class="row">
@@ -144,7 +165,15 @@ while ($page_row = mysqli_fetch_array($page_result)) {
                         <div class="form-group mb-3">
                             <label for="simpleinput">强制更新机制</label>
                             <select name="site_state"  class="form-control">
-                                <option value="" selected>请选择</option>
+                                <option value="<?php echo $state_state; ?>" selected><?php echo $state_state1; ?></option>
+                                <option value="true">开</option>
+                                <option value="false">关</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="simpleinput">自助授权</label>
+                            <select name="shop"  class="form-control">
+                                <option value="<?php echo $shop_state; ?>" selected><?php echo $shop_state1; ?></option>
                                 <option value="true">开</option>
                                 <option value="false">关</option>
                             </select>
@@ -159,7 +188,7 @@ while ($page_row = mysqli_fetch_array($page_result)) {
                         <div class="form-group mb-3">
                             <label for="simpleinput">授权状态</label>
                             <select name="switch"  class="form-control">
-                                <option value="" selected>请选择</option>
+                                <option value="<?php echo $switch_state; ?>" selected><?php echo $switch_state1; ?></option>
                                 <option value="true">开</option>
                                 <option value="false">关</option>
                             </select>
@@ -227,6 +256,7 @@ while ($page_row = mysqli_fetch_array($page_result)) {
                         <th>应用介绍</th>
                         <th>当前版本</th>
                         <th>授权状态</th>
+                        <th>自助授权</th>
                         <th>强制更新状态</th>
                         <th>最后修改时间</th>
                         <th>操作</th>
@@ -251,6 +281,7 @@ while ($page_row = mysqli_fetch_array($page_result)) {
                         <td><?php echo $page_row['introduce']; ?></td>
                         <td><?php echo $page_row['version']; ?></td>
                         <td><span class="badge badge-<?php echo $site_staet; ?>"><?php echo $page_row['switch']; ?></span></td>
+                        <td><?php echo $page_row['shop']; ?></td>
                         <td><?php echo $page_row['state']; ?></td>
                         <td><?php echo $page_row['time']; ?></td>
                         <td class="table-action">

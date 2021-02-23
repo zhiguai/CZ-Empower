@@ -1,2 +1,111 @@
 <?php
-@header("Content-type: text/html; charset=utf-8");require_once "../config/sqlConfig.php";require_once "../public/dbInc.php";@session_start();$a=Connect();require_once "../config/systemConfig.php";function GetClientIp(){$b=$_SERVER['REMOTE_ADDR'];if(isset($_SERVER['HTTP_CLIENT_IP'])&&preg_match('/^([0-9]{1,3}\.){3}[0-9]{1,3}$/',$_SERVER['HTTP_CLIENT_IP'])){$b=$_SERVER['HTTP_CLIENT_IP'];}elseif(isset($_SERVER['HTTP_X_FORWARDED_FOR'])and preg_match_all('#\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}#s',$_SERVER['HTTP_X_FORWARDED_FOR'],$c)){foreach($c[0]as $d){if(!preg_match('#^(10|172\.16|192\.168)\.#',$d)){$b=$d;break;}}}return $b;}$b=GetClientIp();if($_POST['state']=='zan'){$e=$_POST['id'];$f="select * from zan where cardid='$e' and ip='$b'";$g=Execute($a,$f);if(mysqli_num_rows($g)){$h="select * from card where id='$e'";$i=Execute($a,$h);while($j=mysqli_fetch_array($i)){$k=$j["zan"];echo $k;}}else{$l="insert into zan (cardid,ip,time) values('$e','$b','$m')";$n=Execute($a,$l);$o="update card set zan=zan+1 where id='$e'";$p=Execute($a,$o);$h="select * from card where id='$e'";$i=Execute($a,$h);while($j=mysqli_fetch_array($i)){$k=$j["zan"];echo $k;}}exit;}if($_POST['state']=='comment'){require_once dirname(dirname(__FILE__)).'/public/geetest/lib/class.geetestlib.php';require_once dirname(dirname(__FILE__)).'/public/geetest/config/config.php';$q=new GeetestLib(CAPTCHA_ID,PRIVATE_KEY);if($_SESSION['gtserver']==1){$r=$q->success_validate($_POST['geetest_challenge'],$_POST['geetest_validate'],$_POST['geetest_seccode']);if($r){}else{echo '<script>window.location.href="writeCard.php?notifications=2&notifications_content=人机验证失败，请重新验证！"</script>';exit;}}else{if($q->fail_validate($_POST['geetest_challenge'],$_POST['geetest_validate'],$_POST['geetest_seccode'])){}else{echo '<script>window.location.href="writeCard.php?notifications=2&notifications_content=人机验证失败，请重新验证！"</script>';exit;}}if(empty($_POST['cardid'])){echo '<script>window.location.href="index.php?notifications=2&notifications_content=cardid参数无效"</script>';exit;}$e=$_POST['cardid'];if(empty($_POST['name'])){echo"<script>window.location.href=\"card.php?id={$e}&notifications=2&notifications_content=请输入名字\"</script>";exit;}if(mb_strlen($_POST['name'],'UTF8')>6){echo"<script>window.location.href=\"card.php?id={$e}&notifications=2&notifications_content=名字不能超出6个字符\"</script>";exit;}if(empty($_POST['cont'])){echo"<script>window.location.href=\"card.php?id={$e}&notifications=2&notifications_content=请输入内容\"</script>";exit;}if(mb_strlen($_POST['cont'],'UTF8')>24){echo"<script>window.location.href=\"card.php?id={$e}&notifications=2&notifications_content=内容不能超出24个字符\"</script>";exit;}$_POST['name']=Escape($a,$_POST['name']);$_POST['cont']=Escape($a,$_POST['cont']);$s="insert into comment (cardid,cont,ip,name,time) values ('$e','{$_POST['cont']}','{$b}','{$_POST['name']}','{$m}')";$t="update card set comment=comment+1 where id ='{$_POST['cardid']}'";$u=Execute($a,$s);$v=Execute($a,$t);if($u===false||$v===false){echo '<script>window.location.href="index.php?notifications=3&notifications_content=出现内部错误，提交失败！"</script>';}echo"<script>window.location.href=\"card.php?id={$e}&notifications=1&notifications_content=提交成功！\"</script>";exit;}if($_POST['state']=='writecard'){require_once dirname(dirname(__FILE__)).'/public/geetest/lib/class.geetestlib.php';require_once dirname(dirname(__FILE__)).'/public/geetest/config/config.php';$q=new GeetestLib(CAPTCHA_ID,PRIVATE_KEY);if($_SESSION['gtserver']==1){$r=$q->success_validate($_POST['geetest_challenge'],$_POST['geetest_validate'],$_POST['geetest_seccode']);if($r){}else{echo '<script>window.location.href="writeCard.php?notifications=2&notifications_content=人机验证失败，请重新验证！"</script>';exit;}}else{if($q->fail_validate($_POST['geetest_challenge'],$_POST['geetest_validate'],$_POST['geetest_seccode'])){}else{echo '<script>window.location.href="writeCard.php?notifications=2&notifications_content=人机验证失败，请重新验证！"</script>';exit;}}if(empty($_POST['name1'])){$_POST['name1']='false';}if(mb_strlen($_POST['name1'],'UTF8')>6){echo "<script>window.location.href=\"writeCard.php?notifications=2&notifications_content=名字不能超出6个字符\"</script>";exit;}if(empty($_POST['name2'])){echo "<script>window.location.href=\"writeCard.php?notifications=2&notifications_content=请输入TA的名字\"</script>";exit;}if(mb_strlen($_POST['name2'],'UTF8')>6){echo "<script>window.location.href=\"writeCard.php?notifications=2&notifications_content=名字不能超出6个字符\"</script>";exit;}if(empty($_POST['img'])){$_POST['img']='false';}if(empty($_POST['cont'])){echo "<script>window.location.href=\"writeCard.php?notifications=2&notifications_content=请输入内容\"</script>";exit;}if(mb_strlen($_POST['cont'],'UTF8')>120){echo "<script>window.location.href=\"writeCard.php?notifications=2&notifications_content=内容不能超出120个字符\"</script>";exit;}$_POST['name1']=Escape($a,$_POST['name1']);$_POST['name2']=Escape($a,$_POST['name2']);$_POST['img']=Escape($a,$_POST['img']);$_POST['cont']=Escape($a,$_POST['cont']);$s="insert into card (name_1,name_2,cont,img,ip,zan,comment,time) values ('{$_POST['name1']}','{$_POST['name2']}','{$_POST['cont']}','{$_POST['img']}','{$b}','0','0','{$m}')";$u=Execute($a,$s);if($u===false){echo '<script>window.location.href="writeCard.php?notifications=3&notifications_content=出现内部错误，提交失败！"</script>';}echo "<script>window.location.href=\"wall.php?notifications=1&notifications_content=提交成功！\"</script>";exit;}echo '<script>window.location.href="index.php?notifications=3&notifications_content=state参数无效"</script>';
+    define('free_number','5');//自助授权个数
+    define('free_day','3');//自助授权开通天数
+
+    @header("Content-type: text/html; charset=utf-8");
+    //引入数据库配置
+    require_once "../config/sqlConfig.php";
+    //引入数据库操作函数库
+    require_once "../public/dbInc.php";
+
+    //启动session
+    @session_start();
+
+    //数据库连接检测
+    $conn = Connect();
+
+
+    //其余
+
+
+    //引入基本配置
+    require_once "../config/systemConfig.php";
+
+    //ip获取函数
+    function GetClientIp()
+    {
+        $ip = $_SERVER['REMOTE_ADDR'];
+        if (isset($_SERVER['HTTP_CLIENT_IP']) && preg_match('/^([0-9]{1,3}\.){3}[0-9]{1,3}$/', $_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR']) and preg_match_all('#\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}#s', $_SERVER['HTTP_X_FORWARDED_FOR'], $matches)) {
+            foreach ($matches[0] as $xip) {
+                if (!preg_match('#^(10|172\.16|192\.168)\.#', $xip)) {
+                    $ip = $xip;
+                    break;
+                }
+            }
+        }
+        return $ip;
+    }
+    //常用变量
+    $ip = GetClientIp();
+    //判断是否登入
+    if (empty($_SESSION['username'])) {
+        echo '<script>window.location.href="login.php?notifications=2&notifications_content=请先登录"</script>';
+        exit;
+    }
+
+   //自助添加站点
+   if ($_POST['state'] == 'addurl') {
+        $_POST['site_id'] = addslashes($_POST['site_id']);
+        $_POST['url'] = addslashes($_POST['url']);
+        if (empty($_POST['site_id']) || empty($_POST['url'])) {
+            echo "<script>window.location.href=\"shop.php?state=edit&id={$_POST['id']}&notifications=2&notifications_content=请勿留空！\"</script>";
+            exit;
+        }
+
+        $result_url = Execute($conn, "select * from url where email = '{$_SESSION['username']}'"); //获得记录总数
+        if (free_number <= mysqli_num_rows($result_url)) {
+            echo "<script>window.location.href=\"shop.php?&notifications=2&notifications_content=您的申请次数达到上限，请联系管理员\"</script>";
+            exit;
+        }
+        //防止重复
+        $sql = Execute($conn, "select * from url where site_id = '{$_POST['site_id']}' and url = '{$_POST['url']}'");//查询数据
+        if (mysqli_num_rows($sql) == 1) {
+            echo "<script>window.location.href=\"shop.php?&notifications=2&notifications_content=该授权信息已存在，请修改后再试\"</script>";
+            exit;
+        }
+
+        if (mb_strlen($_POST['site_id'], 'UTF8') > 10) {
+            echo "<script>window.location.href=\"shop.php?&notifications=2&notifications_content=授权应用ID不能超出10个字符\"</script>";
+            exit;
+        }
+        if (mb_strlen($_POST['site_id'], 'UTF8') < 1) {
+            echo "<script>window.location.href=\"shop.php?&notifications=2&notifications_content=授权应用ID不得低于1个字符\"</script>";
+            exit;
+        }
+
+        //该站点是否开启自助授权
+        $result = Execute($conn, "select * from site where id='{$_POST['site_id']}'"); //获得记录总数
+        $sql = mysqli_fetch_assoc($result);
+        if(empty($sql['shop']) || $sql['shop'] == "false"){
+            echo "<script>window.location.href=\"shop.php?&notifications=2&notifications_content=该站点没有开启自助授权\"</script>";
+            exit;
+        }
+
+        $search = '/(?:[A-za-z0-9-]+\.)+[A-za-z]{2,4}(?:[\/\?#][\/=\?%\-&~`@[\]\':+!\.#\w]*)?$/';
+        if(!preg_match($search,$_POST['url'])){
+            echo "<script>window.location.href=\"shop.php?&notifications=2&notifications_content=域名格式错误\"</script>";
+            exit;
+        }
+        if (mb_strlen($_POST['url'], 'UTF8') > 50) {
+            echo "<script>window.location.href=\"shop.php?&notifications=2&notifications_content=域名不能超出50个字符\"</script>";
+            exit;
+        }
+        if (mb_strlen($_POST['url'], 'UTF8') < 3) {
+            echo "<script>window.location.href=\"shop.php?&notifications=2&notifications_content=域名不能低于3个字符\"</script>";
+            exit;
+        }
+
+        $time = date('Y-m-d h:i:s', time());
+        $time1 = date("Y-m-d",strtotime("+".free_day." day"));
+        $sql = "INSERT INTO url (site_id,url,email,state,expire_time,time)
+        VALUES ('{$_POST['site_id']}','{$_POST['url']}','{$_SESSION['username']}','true','{$time1}','{$time}')";
+        
+        if (Execute($conn, $sql)) {
+            echo "<script>window.location.href=\"shop.php?notifications=1&notifications_content=添加成功\"</script>";
+            exit;
+        }
+        echo "<script>window.location.href=\"shop.php?notifications=3&notifications_content=系统出错,数据写入失败！\"</script>";
+        exit;
+    }   
