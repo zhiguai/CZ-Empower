@@ -5,7 +5,6 @@
         echo "<script>window.location.href=\"login.php?notifications=2&notifications_content=请先验证身份\"</script>";
         exit;
     }
-
     $result = Execute($conn, 'select * from site where shop="true"'); //获得记录总数
     $result_url = Execute($conn, "select * from url where email = '{$_SESSION['username']}'"); //获得记录总数
 ?>
@@ -44,7 +43,21 @@
 
 <section class="slice slice-lg" id="sct-form-contact">
     <div class="container position-relative zindex-100">
- 
+        <div class="card shadow-lg border-0" style="max-width: 100%;">
+            <div class="card-body px-5">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="pt-4">留言条</h5>
+                        <p class="opacity-8">
+                        <?php echo SYSTEM_NOTICE1?>
+                        </p>
+                    </div>
+                    <div class="col-12 col-md-6 mt-4 mt-md-0 pr-4 pb-3 d-flex align-items-end justify-content-md-end">
+                        <img src="../assets/index/img/svg/illustrations/illustration-11.svg" class="img-fluid img-center" style="height: 200px;">
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row justify-content-center mb-5">
             <div class="col-lg-6">
 
@@ -114,6 +127,42 @@
                                     <p id="wait" class="show">正在加载验证码......</p>
                                     <div class="mt-4">
                                         <button  id="embed-submit"  type="submit" name="state" value="addurl"class="btn btn-block btn-primary">提 交</button>
+                                    </div>
+                                
+                                </form>
+                                
+                                <!-- Alternative login -->
+                                
+                                <!-- Links -->
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br><br>
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <!-- Form -->
+                <div class="tab-example-result">
+                    <div class="card mb-0"> 
+                        <div class="p-5">
+                            <div>
+                                <div class="mb-5 text-center">
+                                    <h6 class="h3 mb-1">授权打卡</h6>
+                                    <p class="text-muted mb-0">在自己授权列表里，选择一个你想要增加天数的授并打卡抽取天数.</p>
+                                </div>
+                                <span class="clearfix"></span>
+                                <form action="api.php" method="POST">
+                                    <label class="form-control-label">授权的ID</label>
+                                    <div class="form-group">
+                                        <input name="id" type="text" class="form-control form-control-emphasized" placeholder="请填写可申请站点的授权ID">
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <button type="submit" name="state" value="clockin"class="btn btn-block btn-primary">提 交</button>
                                     </div>
                                 
                                 </form>

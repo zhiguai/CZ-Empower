@@ -249,17 +249,10 @@
             exit;
         }
 
-        if ($_POST['tittle'] == SYSTEM_TITTLE && $_POST['keyworld'] == SYSTEM_KEYWORDS && $_POST['description'] == SYSTEM_DESCRIPTION && $_POST['notice'] == SYSTEM_NOTICE&& $_POST['copyright'] == SYSTEM_COPYRIGHT && $_POST['friend'] == SYSTEM_FRIENDS) {
+        if ($_POST['tittle'] == SYSTEM_TITTLE && $_POST['keyworld'] == SYSTEM_KEYWORDS && $_POST['description'] == SYSTEM_DESCRIPTION && $_POST['notice'] == SYSTEM_NOTICE && $_POST['notice1'] == SYSTEM_NOTICE1 && $_POST['copyright'] == SYSTEM_COPYRIGHT && $_POST['friend'] == SYSTEM_FRIENDS) {
             echo '<script>window.location.href="system.php?notifications=2&notifications_content=请修改后再提交"</script>';
             exit;
         }
-
-        $_POST['tittle'] = addslashes($_POST['tittle']);
-        $_POST['keyworld'] = addslashes($_POST['keyworld']);
-        $_POST['description'] = addslashes($_POST['description']);
-        $_POST['notice'] = addslashes($_POST['notice']);
-        $_POST['copyright'] = addslashes($_POST['copyright']);
-        $_POST['friend'] = addslashes($_POST['friend']);
 
         $filename='../config/systemConfig.php';
         $str_file=file_get_contents($filename);
@@ -283,14 +276,19 @@
             $_POST['notice']=addslashes($_POST['notice']);
             $str_file=preg_replace($pattern, "'SYSTEM_NOTICE','{$_POST['notice']}')", $str_file);
         }
+        $pattern="/'SYSTEM_NOTICE1',.*?\)/";
+        if (preg_match($pattern, $str_file)) {
+            $_POST['notice1']=addslashes($_POST['notice1']);
+            $str_file=preg_replace($pattern, "'SYSTEM_NOTICE1','{$_POST['notice1']}')", $str_file);
+        }
         $pattern="/'SYSTEM_COPYRIGHT',.*?\)/";
         if (preg_match($pattern, $str_file)) {
-            $_POST['copyright']=$_POST['copyright'];
+            $_POST['copyright']=addslashes($_POST['copyright']);
             $str_file=preg_replace($pattern, "'SYSTEM_COPYRIGHT','{$_POST['copyright']}')", $str_file);
         }
         $pattern="/'SYSTEM_FRIENDS',.*?\)/";
         if (preg_match($pattern, $str_file)) {
-            $_POST['friend']=$_POST['friend'];
+            $_POST['friend']=addslashes($_POST['friend']);
             $str_file=preg_replace($pattern, "'SYSTEM_FRIENDS','{$_POST['friend']}')", $str_file);
         }
         if (!file_put_contents($filename, $str_file)) {
@@ -315,44 +313,37 @@
             exit;
         }
 
-        $_POST['smtp_server'] = addslashes($_POST['smtp_server']);
-        $_POST['smtp_serverport'] = addslashes($_POST['smtp_serverport']);
-        $_POST['smtp_usermail'] = addslashes($_POST['smtp_usermail']);
-        $_POST['smtp_usermail1'] = addslashes($_POST['smtp_usermail1']);
-        $_POST['smtp_pass'] = addslashes($_POST['smtp_pass']);
-        $_POST['smtp_username'] = addslashes($_POST['smtp_username']);
-
-        $filename='../config/systemConfig.php';
+        $filename='../public/email/config.php';
         $str_file=file_get_contents($filename);
         $pattern="/'smtp_server',.*?\)/";
         if (preg_match($pattern, $str_file)) {
             $_POST['smtp_server']=addslashes($_POST['smtp_server']);
-            $str_file=preg_replace($pattern, "'smtp_server','{$_POST['tittle']}')", $str_file);
+            $str_file=preg_replace($pattern, "'smtp_server','{$_POST['smtp_server']}')", $str_file);
         }
         $pattern="/'smtp_serverport',.*?\)/";
         if (preg_match($pattern, $str_file)) {
-            $_POST['keywords']=addslashes($_POST['keywords']);
-            $str_file=preg_replace($pattern, "'smtp_serverport','{$_POST['keywords']}')", $str_file);
+            $_POST['smtp_serverport']=addslashes($_POST['smtp_serverport']);
+            $str_file=preg_replace($pattern, "'smtp_serverport','{$_POST['smtp_serverport']}')", $str_file);
         }
         $pattern="/'smtp_usermail',.*?\)/";
         if (preg_match($pattern, $str_file)) {
-            $_POST['description']=addslashes($_POST['description']);
-            $str_file=preg_replace($pattern, "'smtp_usermail','{$_POST['description']}')", $str_file);
+            $_POST['smtp_usermail']=addslashes($_POST['smtp_usermail']);
+            $str_file=preg_replace($pattern, "'smtp_usermail','{$_POST['smtp_usermail']}')", $str_file);
         }
-        $pattern="/'smtp_usermail',.*?\)/";
+        $pattern="/'smtp_usermail1',.*?\)/";
         if (preg_match($pattern, $str_file)) {
-            $_POST['notice']=addslashes($_POST['notice']);
-            $str_file=preg_replace($pattern, "'smtp_usermail','{$_POST['notice']}')", $str_file);
+            $_POST['smtp_usermail1']=addslashes($_POST['smtp_usermail1']);
+            $str_file=preg_replace($pattern, "'smtp_usermail1','{$_POST['smtp_usermail1']}')", $str_file);
         }
         $pattern="/'smtp_pass',.*?\)/";
         if (preg_match($pattern, $str_file)) {
-            $_POST['copyright']=$_POST['copyright'];
-            $str_file=preg_replace($pattern, "'smtp_pass','{$_POST['copyright']}')", $str_file);
+            $_POST['smtp_pass']=$_POST['smtp_pass'];
+            $str_file=preg_replace($pattern, "'smtp_pass','{$_POST['smtp_pass']}')", $str_file);
         }
         $pattern="/'smtp_username',.*?\)/";
         if (preg_match($pattern, $str_file)) {
-            $_POST['friend']=$_POST['friend'];
-            $str_file=preg_replace($pattern, "'smtp_username','{$_POST['friend']}')", $str_file);
+            $_POST['smtp_username']=$_POST['smtp_username'];
+            $str_file=preg_replace($pattern, "'smtp_username','{$_POST['smtp_username']}')", $str_file);
         }
         if (!file_put_contents($filename, $str_file)) {
             echo '<script>window.location.href="email.php?notifications=2&notifications_content=修改失败，请检查权限！"</script>';

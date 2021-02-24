@@ -34,7 +34,7 @@
                     <div class="col-lg-6">
                         <div class="form-group mb-3">
                             <label for="simpleinput">SMTP服务器</label>
-                            <input type="text" name="smtp_server" class="form-control" placeholder="CZCW表白墙" value="<?php echo smtp_username;?>">
+                            <input type="text" name="smtp_server" class="form-control" placeholder="CZCW表白墙" value="<?php echo smtp_server;?>">
                         </div>
                         <div class="form-group mb-3">
                             <label for="simpleinput">SMTP端口</label>

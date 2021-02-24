@@ -44,8 +44,12 @@
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="example-textarea">留言条</label>
-                            <textarea class="form-control" name="notice" rows="5" placeholder="欢迎来到CZCW表白墙！"><?php echo SYSTEM_NOTICE?></textarea>
+                            <label for="example-textarea">全站留言条</label>
+                            <textarea class="form-control" name="notice" rows="5" placeholder="欢迎来到CZCW表白墙！"><?php echo SYSTEM_NOTICE;?></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="example-textarea">授权管理页留言条</label>
+                            <textarea class="form-control" name="notice1" rows="5" placeholder="欢迎来到CZCW表白墙！"><?php echo SYSTEM_NOTICE1;?></textarea>
                         </div>
                     </div> <!-- end col -->
 

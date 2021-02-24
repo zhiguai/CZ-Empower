@@ -1,7 +1,4 @@
 <?php
-    define('free_number','5');//自助授权个数
-    define('free_day','3');//自助授权开通天数
-
     @header("Content-type: text/html; charset=utf-8");
     //引入数据库配置
     require_once "../config/sqlConfig.php";
@@ -16,7 +13,10 @@
 
 
     //其余
-
+    define('free_switch','true');//打卡功能开关
+    define('free_number','5');//自助授权个数
+    define('free_day','3');//自助授权开通天数
+    $numberday = mt_rand(1, 5);//打卡增加随机授权天数;
 
     //引入基本配置
     require_once "../config/systemConfig.php";
@@ -124,9 +124,60 @@
         VALUES ('{$_POST['site_id']}','{$_POST['url']}','{$_SESSION['username']}','true','{$time1}','{$time}')";
         
         if (Execute($conn, $sql)) {
-            echo "<script>window.location.href=\"shop.php?notifications=1&notifications_content=添加成功\"</script>";
+            echo "<script>window.location.href=\"shop.php?notifications=1&notifications_content=成功添加".free_day."天,注意申请上限".free_number."个,请慎重申请！\"</script>";
             exit;
         }
         echo "<script>window.location.href=\"shop.php?notifications=3&notifications_content=系统出错,数据写入失败！\"</script>";
         exit;
     }   
+    
+    if($_POST['state'] == "clockin"){
+        if (free_switch == "true") {
+            //字符串过滤
+            if (mb_strlen($_POST['id'], 'UTF8') > 10) {
+                echo "<script>window.location.href=\"shop.php?&notifications=2&notifications_content=授权应用ID不能超出10个字符\"</script>";
+                exit;
+            }
+            if (mb_strlen($_POST['id'], 'UTF8') < 1) {
+                echo "<script>window.location.href=\"shop.php?&notifications=2&notifications_content=授权应用ID不得低于1个字符\"</script>";
+                exit;
+            }
+            $result_url = Execute($conn, "select * from url where email = '{$_SESSION['username']}' and id = '{$_POST['id']}'"); //获得记录总数
+            $row = mysqli_fetch_assoc($result_url);
+            //该授权是否属于该账户
+            if (empty($row['id']) || $row['id'] !== $_POST['id']) {
+                echo "<script>window.location.href=\"shop.php?&notifications=2&notifications_content=该授权不存在或不属于该身份\"</script>";
+                exit;
+            }
+            //该授权今日是否已经打卡
+            $time1 =strtotime( date('Y-m-d',strtotime($row['time'])));
+            $time2 = strtotime(date('Y-m-d'));
+            if ($time2 <= $time1) {
+                echo "<script>window.location.href=\"shop.php?&notifications=2&notifications_content=该授今日已打卡,请勿重复打卡！\"</script>";
+                exit;
+            }
+
+            //该站点是否开启自助授权
+            $result = Execute($conn, "select * from site where id='{$row['site_id'] }'"); //获得记录总数
+            $sql = mysqli_fetch_assoc($result);
+            if(empty($sql['shop']) || $sql['shop'] == "false"){
+                echo "<script>window.location.href=\"shop.php?&notifications=2&notifications_content=该应用没有开启申请授权或不存在\"</script>";
+                exit;
+            }
+            $expire_time = date("Y-m-d",strtotime("+".$numberday." day",strtotime($row['expire_time'])));
+            $time = date('Y-m-d H:i:s');
+            $result = "update url set expire_time = '{$expire_time}',time = '{$time}' where id = '{$_POST['id']}'";
+            if(Execute($conn,$result)){
+                echo "<script>window.location.href=\"shop.php?notifications=1&notifications_content=打卡成功，授权ID:".$_POST['id']."随机增加".$numberday."天\"</script>";
+                exit;
+            }
+            echo "<script>window.location.href=\"shop.php?notifications=3&notifications_content=系统出错,数据写入失败！\"</script>";
+            exit;
+        } else {
+            echo "<script>window.location.href=\"shop.php?notifications=3&notifications_content=该功能暂未开启！\"</script>";
+            exit;
+        }
+
+    }
+echo "<script>window.location.href=\"shop.php?notifications=3&notifications_content=state参数不合法！\"</script>";
+exit;
