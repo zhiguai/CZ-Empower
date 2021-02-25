@@ -1,7 +1,7 @@
 <?php
 $key=rawurlencode("WvEXisxKsoZ75sVClFxftLVoa7LZJRxJXdvMUHOJydJvbeNGYlgqPGhh0zQmt5ZQbbS8gPCk4ZkDH6ih8m+eWnGzg4plJKGeXCm/HDNrlMLvWncbnz9KMp5jHxcWsO1Usnozt3QdNwbDLi4B8PAB1wzfgaBnn4dfeHA1ACXSIIgSGJcA1WRLC1o2vhLwIHGgWFssbHHnSrpUl6T1Xl+GQf3Vntw2RNV33KOjJePu9tmAEv4QFBVMT/Uy+ISAKCKiFAGofPxZbCTIOT2dZzh9YYZRgV2RSZSwZJEDI2ZUYtpwiipUFSlM4tpxFeEmGJzU7mwKSCVmUNcp2KWAfRq3hQ==");//授权代码
 
-$url= "https://server.fatda.cn/api1.php?key={$key}&name={$_SERVER['HTTP_HOST']}&version=1.0.1";//构造请求地址
+$url= "https://server.fatda.cn/api.php?key={$key}&name={$_SERVER['HTTP_HOST']}&version=".SYSTEM_VERSION;//构造请求地址
 
 //构建$file_content的https请求条件
 $stream_opts = [
@@ -13,34 +13,34 @@ $stream_opts = [
 @$file_content = file_get_contents($url,false, stream_context_create($stream_opts));//发起请求并返回标准的json
 
 //判断请求是否失败
-if(empty($file_content)){
-    $contents = '授权服务器连接失败,请联系管理员!';
+if(!$file_content){
+    $contents = "授权服务器连接失败！";
 }else{
     $arr = json_decode($file_content,true);//对json格式的字符串进行编码，同时进行数组化
     if($arr['state'] == "500"){
         $state ="500";
-        $contents = "KEY,域名,版本号获取失败";
+        $contents = $arr['contents'];
     }
     if($arr['state'] == "300"){
         $state ="300";
-        $contents = "KEY,域名不匹配";
+        $contents = $arr['contents'];
     }
     if($arr['state'] == "501"){
         $state ="501";
-        $contents = "您的站点没有授权";
+        $contents = $arr['contents'];
     }
     if($arr['state'] == "502"){
         $state ="502";
-        $contents = "该程序已开启强制更新,请前往下载最新版本".$arr['site_version'];
+        $contents = $arr['contents'];
     }
     if($arr['state'] == "200"){
         if($arr['url_state'] == "0"){
             $state ="0";
-            $contents = "您的站点已被锁定！";
+            $contents = $arr['contents'];
         }
         if($arr['url_state'] == "2"){
             $state ="2";
-            $contents = "您的站点授权已到期，请获取新的key！";
+            $contents = $arr['contents'];
         }
         if($arr['url_state'] == "1"){
             $state ="200";

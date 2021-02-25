@@ -63,6 +63,7 @@
 	//判断key 和 url是否传入
     if(empty($_GET['key']) || empty($_GET['name']) || empty($_GET['version'])){
         $output_data['state'] ="500";//设定参数state输出值500
+		$output_data['contents'] ="KEY,域名,版本号获取失败";//设定输出提示
     }else{
 		$privEncrypt = $_GET['key'];//解密KEY
 		$receive_data = json_decode($rsa->publicDecrypt($privEncrypt),true);//对json格式的字符串进行编码，同时进行数组化
@@ -94,6 +95,7 @@
 					if (mysqli_num_rows($sql) !== 1) {
 						//没有该授权数据时
 						$output_data['state'] ="501";//设定状态为"501"
+						$output_data['contents'] ="您的站点没有授权";//设定输出提示
 					}else{
 						//有该授权数据时
 						$sql_data = mysqli_fetch_assoc($sql);//获取该站点数据
@@ -110,10 +112,12 @@
 							}else{
 								//授权到期
 								$output_data['url_state'] = "2";
+								$output_data['contents'] ="您的站点授权已到期，请获取新的key！";//设定输出提示
 							}
 						}else{
 							//授权锁定
 							$output_data['url_state'] = "0";
+							$output_data['contents'] ="您的站点已被锁定！";//设定输出提示
 						}
 					}
 				}else{
@@ -126,6 +130,7 @@
 					//比较当前版本和key的版本
 					if($output_data['site_version']>$_GET['version']){
 						$output_data['state'] ="502";//设定参数state输出值502
+						$output_data['contents'] ="该程序已开启强制更新,请前往下载最新版本";//设定输出提示
 					}
 				}
 			}else{
@@ -145,6 +150,7 @@
 		}else{
 		//不匹配时
 		$output_data['state'] ="300";//设定参数state输出值300
+		$output_data['contents'] ="KEY,域名不匹配";//设定输出提示
 		}
 	}
 	
